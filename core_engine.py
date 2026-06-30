@@ -59,7 +59,7 @@ def generate_documents_from_excel(template_path: str, excel_path: str, output_di
             doc.render(context)
             
             raw_identifier = str(record.get(filename_column, f"berkas_{index}")).strip()
-            clean_identifier = re.sub(r'[\\/*?:"<>|]', "", raw_identifier).replace(" ", "_")
+            clean_identifier = re.sub(r'[\\/*?:"<>|]', "", raw_identifier).rstrip(".")
             filename_base = f"{file_prefix}_{clean_identifier}" if file_prefix else clean_identifier
             
             temp_docx_path = os.path.join(output_dir, f"{filename_base}.docx")
