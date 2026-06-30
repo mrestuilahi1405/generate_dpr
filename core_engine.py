@@ -63,7 +63,7 @@ def generate_documents_from_excel(template_path: str, excel_path: str, output_di
             filename_base = f"{file_prefix}_{clean_identifier}" if file_prefix else clean_identifier
             
             temp_docx_path = os.path.join(output_dir, f"{filename_base}.docx")
-            output_pdf_path = os.path.join(output_dir, f"{filename_base}.pdf")
+            # output_pdf_path = os.path.join(output_dir, f"{filename_base}.pdf")
             
             doc.save(temp_docx_path)
             
