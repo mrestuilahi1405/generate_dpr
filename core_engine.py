@@ -67,10 +67,13 @@ def generate_documents_from_excel(template_path: str, excel_path: str, output_di
             
             doc.save(temp_docx_path)
             
+            linux_env = os.environ.copy()
+            linux_env["PAPERSIZE"] = "a4"
+            
             subprocess.run([
                 libreoffice_cmd, '--headless', '--convert-to', 'pdf',
                 temp_docx_path, '--outdir', output_dir
-            ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            ], check=True, env=linux_env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             if os.path.exists(temp_docx_path):
                 os.remove(temp_docx_path)
