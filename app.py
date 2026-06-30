@@ -3,8 +3,39 @@ import os
 import tempfile
 import shutil
 import pandas as pd
+import subprocess
 from core_engine import generate_documents_from_excel
 
+# ==========================================
+# FUNGSI INJEKSI FONT KE SERVER LINUX
+# ==========================================
+def setup_custom_fonts():
+    # Folder tempat font disimpan di repositori GitHub
+    font_source = "fonts"
+    # Direktori font global untuk user di Linux
+    font_dest = os.path.expanduser("~/.fonts")
+    
+    # Cek apakah folder 'fonts' ada di repositori
+    if os.path.exists(font_source):
+        os.makedirs(font_dest, exist_ok=True)
+        # Cek apakah Arial sudah terpasang untuk menghindari proses berulang
+        if not os.path.exists(os.path.join(font_dest, "arial.ttf")):
+            for font_file in os.listdir(font_source):
+                if font_file.lower().endswith(".ttf"):
+                    shutil.copy(os.path.join(font_source, font_file), font_dest)
+            
+            # Beritahu OS Linux untuk merefresh daftar font
+            try:
+                subprocess.run(['fc-cache', '-f', '-v'], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                print("Custom fonts (Arial) berhasil diinstal di server!")
+            except Exception as e:
+                print(f"Gagal refresh font cache: {e}")
+
+# Eksekusi injeksi sebelum Streamlit merender halaman
+setup_custom_fonts()
+# ==========================================
+
+# Sisa kode Streamlit Anda di bawah ini
 st.set_page_config(page_title="Ultra Universal Doc Gen", layout="centered")
 
 st.title("Generator Berkas Otomatis (Multi-Sheet Mode)")
